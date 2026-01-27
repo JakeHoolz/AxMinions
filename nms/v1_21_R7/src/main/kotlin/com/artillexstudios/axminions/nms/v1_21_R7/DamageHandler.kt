@@ -8,6 +8,7 @@ import net.minecraft.util.Mth
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EquipmentSlot
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.animal.Fox
 import net.minecraft.world.entity.decoration.ArmorStand
 import net.minecraft.world.item.AxeItem
 import net.minecraft.world.item.ItemStack
@@ -25,7 +26,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.core.component.DataComponents
 import net.minecraft.core.Holder
 import net.minecraft.world.entity.ai.attributes.Attribute
-import net.minecraft.world.entity.animal.fox.Fox
 import java.util.*
 
 object DamageHandler {
@@ -115,14 +115,14 @@ object DamageHandler {
                         if (nmsEntity is LivingEntity) {
                             (nmsEntity).knockback(
                                 (i.toFloat() * 0.5f).toDouble(),
-                                Mth.sin((source.getLocation().yaw * 0.017453292f).toDouble()).toDouble(),
-                                (-Mth.cos((source.getLocation().yaw * 0.017453292f).toDouble())).toDouble()
+                                Mth.sin(source.getLocation().yaw * 0.017453292f).toDouble(),
+                                (-Mth.cos(source.getLocation().yaw * 0.017453292f)).toDouble()
                             )
                         } else {
                             nmsEntity.push(
-                                (-Mth.sin((source.getLocation().yaw * 0.017453292f).toDouble()) * i.toFloat() * 0.5f).toDouble(),
+                                (-Mth.sin(source.getLocation().yaw * 0.017453292f) * i.toFloat() * 0.5f).toDouble(),
                                 0.1,
-                                (Mth.cos((source.getLocation().yaw * 0.017453292f).toDouble()) * i.toFloat() * 0.5f).toDouble()
+                                (Mth.cos(source.getLocation().yaw * 0.017453292f) * i.toFloat() * 0.5f).toDouble()
                             )
                         }
                     }
@@ -158,16 +158,16 @@ object DamageHandler {
                                 if (entityliving.hurtServer((source.getLocation().world as CraftWorld).handle as ServerLevel, nmsEntity.damageSources().noAggroMobAttack(DUMMY_ENTITY), f4)) {
                                     entityliving.knockback(
                                         0.4000000059604645,
-                                        Mth.sin((source.getLocation().yaw * 0.017453292f).toDouble()).toDouble(),
-                                        (-Mth.cos((source.getLocation().yaw * 0.017453292f).toDouble())).toDouble()
+                                        Mth.sin(source.getLocation().yaw * 0.017453292f).toDouble(),
+                                        (-Mth.cos(source.getLocation().yaw * 0.017453292f)).toDouble()
                                     )
                                 }
                                 // CraftBukkit end
                             }
                         }
 
-                        val d0 = -Mth.sin((source.getLocation().yaw * 0.017453292f).toDouble()).toDouble()
-                        val d1 = Mth.cos((source.getLocation().yaw * 0.017453292f).toDouble()).toDouble()
+                        val d0 = -Mth.sin(source.getLocation().yaw * 0.017453292f).toDouble()
+                        val d1 = Mth.cos(source.getLocation().yaw * 0.017453292f).toDouble()
 
                         if ((source.getLocation().world as CraftWorld).handle is ServerLevel) {
                             ((source.getLocation().world as CraftWorld).handle as ServerLevel).sendParticles(
