@@ -110,7 +110,11 @@ public enum Version {
         }
 
         try {
-            return Bukkit.getUnsafe().getProtocolVersion();
+            Object unsafe = Bukkit.class.getMethod("getUnsafe").invoke(null);
+            Object result = unsafe.getClass().getMethod("getProtocolVersion").invoke(unsafe);
+            if (result instanceof Integer) {
+                return (Integer) result;
+            }
         } catch (Exception ignored) {
             return null;
         }
