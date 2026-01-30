@@ -10,8 +10,15 @@ import org.bukkit.inventory.ItemStack
 
 interface NMSHandler {
     companion object {
-        private val handler: NMSHandler =
-            Class.forName("com.artillexstudios.axminions.nms.${Version.getServerVersion().getNMSVersion()}.NMSHandler").getConstructor().newInstance() as NMSHandler
+        private val handler: NMSHandler = run {
+            val serverVersion = Version.getServerVersion()
+            check(serverVersion == Version.v1_21_11) {
+                "AxMinions supports only Minecraft 1.21.11. Detected: ${serverVersion.getVersions()}"
+            }
+            Class.forName("com.artillexstudios.axminions.nms.${serverVersion.getNMSVersion()}.NMSHandler")
+                .getConstructor()
+                .newInstance() as NMSHandler
+        }
 
         fun get(): NMSHandler {
             return handler
