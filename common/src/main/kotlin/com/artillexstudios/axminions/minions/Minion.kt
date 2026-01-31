@@ -179,7 +179,7 @@ class Minion(
 
         if (Config.DEBUG()) {
             debugHologram = Hologram(location.clone().add(0.0, 2.0, 0.0))
-            val page = hologram?.createPage(HologramTypes.TEXT)
+            val page = debugHologram?.createPage(HologramTypes.TEXT)
             page?.setEntityMetaHandler({ meta ->
                 val textDisplayMeta = meta as TextDisplayMeta;
                 textDisplayMeta.seeThrough(true);
