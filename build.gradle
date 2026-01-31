@@ -7,19 +7,30 @@ plugins {
 }
 
 group = 'com.artillexstudios.axminions'
-version = '1.0.18'
+version = '1.0.18a'
+
+// ✅ Local AxAPI jar (use forward slashes on Windows for Gradle)
+def AXAPI_LOCAL_JAR = file("C:/Users/Jake/Documents/GitHub/AxAPI/build/libs/AxAPI-1.4.749-all.jar")
 
 repositories {
     mavenCentral()
 
-    maven {
-        url = uri('https://jitpack.io/')
-    }
+    maven { url = uri('https://jitpack.io/') }
 }
 
 dependencies {
     implementation project(path: ":api")
     implementation project(path: ":common")
+    implementation project(path: ":nms:v1_20_R1", configuration: "reobf")
+    implementation project(path: ":nms:v1_20_R2", configuration: "reobf")
+    implementation project(path: ":nms:v1_20_R3", configuration: "reobf")
+    implementation project(path: ":nms:v1_20_R4", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_R1", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_R2", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_R3", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_R4", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_R5", configuration: "reobf")
+    implementation project(path: ":nms:v1_21_R6", configuration: "reobf")
     implementation project(path: ":nms:v1_21_R7", configuration: "reobf")
 }
 
@@ -49,87 +60,41 @@ allprojects {
         mavenCentral()
         mavenLocal()
 
-        maven {
-            url = uri("https://repo.papermc.io/repository/maven-public/")
-        }
-
-        maven {
-            url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/')
-        }
-
-        maven {
-            url = uri('https://repo.rosewooddev.io/repository/public/' )
-        }
-
-        maven {
-            url = uri('https://repo.bg-software.com/repository/api/' )
-        }
-
-        maven {
-            url = uri('https://jitpack.io/')
-        }
-
-        maven {
-            url = uri('https://repo.alessiodp.com/releases/')
-        }
-
-        maven {
-            url = uri('https://repo.rosewooddev.io/repository/public/')
-        }
-
-        maven {
-            url = uri('https://repo.bg-software.com/repository/api/')
-        }
-
-        maven {
-            url = uri('https://repo.essentialsx.net/releases/')
-        }
-
-        maven {
-            url = uri('https://maven.enginehub.org/repo/')
-        }
-
-        maven {
-            url = uri('https://repo.codemc.org/repository/maven-snapshots')
-        }
-
-        maven {
-            url = uri('https://repo.codemc.org/repository/maven-public/')
-        }
-
-        maven {
-            url = uri('https://repo.alessiodp.com/releases/')
-        }
-
-        maven {
-            url = uri("https://repo.artillex-studios.com/releases")
-        }
-
-        maven {
-            url = uri("https://repo.glaremasters.me/repository/towny")
-        }
-
-        maven {
-            url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-        }
+        maven { url = uri("https://repo.papermc.io/repository/maven-public/") }
+        maven { url = uri('https://hub.spigotmc.org/nexus/content/repositories/snapshots/') }
+        maven { url = uri('https://repo.rosewooddev.io/repository/public/') }
+        maven { url = uri('https://repo.bg-software.com/repository/api/') }
+        maven { url = uri('https://jitpack.io/') }
+        maven { url = uri('https://repo.alessiodp.com/releases/') }
+        maven { url = uri('https://repo.essentialsx.net/releases/') }
+        maven { url = uri('https://maven.enginehub.org/repo/') }
+        maven { url = uri('https://repo.codemc.org/repository/maven-snapshots') }
+        maven { url = uri('https://repo.codemc.org/repository/maven-public/') }
+        maven { url = uri("https://repo.artillex-studios.com/releases") }
+        maven { url = uri("https://repo.glaremasters.me/repository/towny") }
+        maven { url = uri("https://repo.extendedclip.com/content/repositories/placeholderapi/") }
     }
 
     dependencies {
-        compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.9.22'
-        implementation("com.artillexstudios.axapi:axapi:1.4.840:all")
+        // ✅ Align to Kotlin plugin
+        compileOnly 'org.jetbrains.kotlin:kotlin-stdlib:1.9.23'
+
+        // ✅ Use your local AxAPI jar instead of Maven
+        implementation files(AXAPI_LOCAL_JAR)
+
+        // ❌ Removed: implementation:("com.artillexstudios.axapi.api:axapi:1.4.840")
+        // (or any other Maven AxAPI coordinate)
     }
 
-if (project.name != "api") {
-    tasks.named("shadowJar") {
-    mustRunAfter(":api:shadowJar")
+    if (project.name != "api") {
+        tasks.named("shadowJar") {
+            mustRunAfter(":api:shadowJar")
+        }
+    }
 }
-}
-
-
-}
-
 
 shadowJar {
+    // Keep relocations: this will relocate classes from your local AxAPI jar as well
     relocate("com.artillexstudios.axapi", "com.artillexstudios.axminions.libs.axapi")
     relocate("org.h2", "com.artillexstudios.axminions.libs.h2")
     relocate("org.jetbrains.kotlin", "com.artillexstudios.axminions.libs.kotlin")
@@ -144,7 +109,6 @@ shadowJar {
 tasks.named("shadowJar") {
     mustRunAfter(":api:shadowJar")
 }
-
 
 kotlin {
     jvmToolchain(21)
